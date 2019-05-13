@@ -14,10 +14,12 @@ public class NpawServer implements Runnable{
 
     private int port;
     private int maxThreads;
+    private int maxConnections;
 
-    public NpawServer(int port, int maxThreads) {
+    public NpawServer(int port, int maxThreads, int maxConnections) {
         this.port = port;
         this.maxThreads = maxThreads;
+        this.maxConnections = maxConnections;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class NpawServer implements Runnable{
 
     private void createServer(){
         try{
-            webServer = new ServerSocket(this.port);
+            webServer = new ServerSocket(this.port,maxConnections);
             threadPool = Executors.newFixedThreadPool(this.maxThreads);
         } catch (IOException e) {
             System.out.println("Error creating the WebServer at port " + this.port);

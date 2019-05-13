@@ -92,7 +92,7 @@ public class Utils {
 
                 if (account.equalsIgnoreCase("clienteA") || account.equalsIgnoreCase("clienteB")) {
                     // localhost:8080/getData?accountCode=clienteA&targetDevice=XBox&pluginVersion=3.3.1
-                    System.out.println("Pertenece a la plataforma");
+                    //System.out.println("Pertenece a la plataforma");
                     response = new Response(request.getProtocol(), StatusCode.OK);
                 } else {
                     // TODO: DEVOLVER RESPUESTA VACIA
