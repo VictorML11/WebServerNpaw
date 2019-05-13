@@ -12,5 +12,7 @@ public class Main {
         //Create the Server at PORT & limited THREAD count
         new Thread(new NpawServer(PORT, MAX_THREADS)).start();
 
+        //TODO: Command to load the config runtime from a file
+
     }
 }

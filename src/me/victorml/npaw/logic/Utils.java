@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Utils {
 
@@ -20,19 +21,24 @@ public class Utils {
 
             String requestLine = reader.readLine(); // Line format ex:  GET /npaw?name=hola HTTP/1.1 | GET / HTTP/1.1
 
-            if(requestLine != null){
-                String [] requestInfo = requestLine.split(" ");
+            if (requestLine != null) {
+                String[] requestInfo = requestLine.split(" ");
+
+                // Check if browser is asking for icon in that case we dont have it!
+                if(requestInfo[1].contains("favicon")){
+                    return null;
+                }
 
                 // Read the header HTTP request
                 HashMap<String, String> header = new HashMap<>();
                 String headerRequestLine = reader.readLine();
 
-                while(headerRequestLine != null && !headerRequestLine.equals("")) {
-                    String[] headerInf = headerRequestLine.split(": ");
+                while (headerRequestLine != null && !headerRequestLine.equals("")) {
+                    String[] headerInf = headerRequestLine.split(": ", 2);
 
-                    if (headerInf.length == 2){
+                    if (headerInf.length == 2) {
                         header.put(headerInf[0], headerInf[1]);
-                    }else{
+                    } else {
                         throw new IOException("Error reading the header http request [too long]: " + headerRequestLine);
                     }
 
@@ -43,7 +49,7 @@ public class Utils {
                 ArrayList<String> body = new ArrayList<>();
 
                 // Mientras haya body lo guardamos
-                while(reader.ready()) {
+                while (reader.ready()) {
                     String bodyLine = reader.readLine();
                     body.add(bodyLine);
                 }
@@ -65,40 +71,50 @@ public class Utils {
         return request;
     }
 
-    public static Response getResponse(Request request){
+    public static Response getResponse(Request request) {
         Response response = null;
 
         //If the requested was a GET
-        if(request.getHttpMethod().equals("GET")){
+        if (request.getHttpMethod().equals("GET")) {
+
             HashMap<String, String> parameters = request.getParameters();
             // Verify the parameters
 
+            /*
+            for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                System.out.println(entry.getKey() + " " + entry.getValue());
+            }*/
+
             // Do we have the correct lenght? it means we have all parameters otherwhise we are lack of info
-            if(parameters.size() == 3){
+            if (parameters.size() == 3) {
                 // Check if the account is from the server:
                 String account = parameters.get(RequestParameters.Parameters.ACCOUNT_CODE.getParameter());
-                if(account.equalsIgnoreCase("clientA") || account.equalsIgnoreCase("clientB")){
+
+                if (account.equalsIgnoreCase("clienteA") || account.equalsIgnoreCase("clienteB")) {
+                    // localhost:8080/getData?accountCode=clienteA&targetDevice=XBox&pluginVersion=3.3.1
                     System.out.println("Pertenece a la plataforma");
-                }else{
+                    response = new Response(request.getProtocol(), StatusCode.OK);
+                } else {
                     // TODO: DEVOLVER RESPUESTA VACIA
                     System.out.println("No pertenece!");
                 }
 
 
-            }else{
+            } else {
                 // TODO: DEVOLVER RESPUESTA VACIA
                 System.out.println("Faltan parametros");
             }
 
 
-        }else{
-            response = new Response(StatusCode.NOT_IMPLEMENTED);
+        } else {
+            response = new Response(request.getProtocol(), StatusCode.NOT_IMPLEMENTED);
         }
+
+
 
 
         return response;
     }
-
 
 
 }
