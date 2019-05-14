@@ -1,7 +1,10 @@
 package me.victorml.npaw.model;
 
+import me.victorml.npaw.config.NpawConfig;
+
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class HostManager {
 
@@ -9,7 +12,7 @@ public class HostManager {
     private static HostManager instance;
 
     private HostManager() {
-        hosts = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        hosts = new ConcurrentSkipListMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public Host getHostByName(String name){
@@ -22,12 +25,22 @@ public class HostManager {
         }
     }
 
+    public void reloadHosts(){
+        NpawConfig npawConfig = NpawConfig.getInstance();
+        ArrayList<String> currentClusters = npawConfig.getClusters();
+        //Remove the keys that are not in live now! It means they have been removed in the reload
+        for (String cluster : hosts.keySet()) {
+            if (!currentClusters.contains(cluster)) {
+                this.hosts.remove(cluster);
+            }
+        }
+    }
 
 
     /**
-     * Singleton instance for NpawConfig data
+     * Singleton instance for HostManager data
      *
-     * @return NpawConfig
+     * @return HostManager
      */
     public static HostManager getInstance() {
         synchronized (HostManager.class) {

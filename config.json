@@ -7,7 +7,7 @@
         "pluginVersion": "3.3.2",
         "pingTime": 5,
         "hosts": {
-          "ClusertB.com": {
+          "ClusterB.com": {
             "name": "ClusterB.com",
             "charge": 100.0
           }
@@ -16,13 +16,13 @@
       "XBox": {
         "name": "XBox",
         "pluginVersion": "3.3.1",
-        "pingTime": 10,
+        "pingTime": 5,
         "hosts": {
-          "ClusertA.com": {
+          "ClusterA.com": {
             "name": "ClusterA.com",
             "charge": 70.0
           },
-          "ClusertB.com": {
+          "ClusterB.com": {
             "name": "ClusterB.com",
             "charge": 30.0
           }
@@ -38,11 +38,11 @@
         "pluginVersion": "3.3.1",
         "pingTime": 5,
         "hosts": {
-          "ClusertA.com": {
+          "ClusterA.com": {
             "name": "ClusterA.com",
             "charge": 50.0
           },
-          "ClusertB.com": {
+          "ClusterB.com": {
             "name": "ClusterB.com",
             "charge": 50.0
           }

@@ -1,19 +1,18 @@
 package me.victorml.npaw.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import me.victorml.npaw.Main;
 import me.victorml.npaw.model.Client;
 import me.victorml.npaw.model.Device;
 import me.victorml.npaw.model.HostInfo;
 
 import java.io.File;
-import java.lang.reflect.Modifier;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Collectors;
 
 public class NpawConfig {
 
@@ -21,13 +20,6 @@ public class NpawConfig {
     private FileUtil futil;
     private File configFile;
     private Map<String, Client> clients = new ConcurrentSkipListMap<>(String.CASE_INSENSITIVE_ORDER);
-
-    public static final Gson GSON_CONFIG = new GsonBuilder()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .disableHtmlEscaping()
-            .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-            .create();
 
     private NpawConfig() {
         configFile = new File("config.json");
@@ -57,9 +49,19 @@ public class NpawConfig {
                 d.setHosts(hosts);
                 //Populate the array of connections and HostManager
                 d.populateConnections();
+
             }
         }
         this.clients = clientes;
+    }
+
+    public ArrayList<String> getClusters(){
+        //Using lambdas to get what clusters exists with no repetitions
+        return clients.values().stream().flatMap(c ->
+                c.getTargetDevices().values().stream()).flatMap(d ->
+                d.getHosts().keySet().stream()).distinct().collect
+                (Collectors.toCollection(ArrayList::new));
+
     }
 
 
@@ -78,14 +80,13 @@ public class NpawConfig {
         }
 
         // Load from json
-        return GSON_CONFIG.fromJson(content, new TypeToken<Map<String, Client>>() {
-        }.getType());
+        return Main.GSON_CONFIG.fromJson(content, new TypeToken<Map<String, Client>>() {}.getType());
     }
 
     /* Save the current Clients Map data to the System File
      */
     public void saveClientsToFile() {
-        String content = GSON_CONFIG.toJson(this.clients);
+        String content = Main.GSON_CONFIG.toJson(this.clients);
         futil.save(content);
     }
 
