@@ -1,8 +1,7 @@
 package me.victorml.npaw.logic;
 
 import me.victorml.npaw.config.NpawConfig;
-import me.victorml.npaw.model.Client;
-import me.victorml.npaw.model.Device;
+import me.victorml.npaw.model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -94,29 +93,27 @@ public class Utils {
                     if(d != null){
                         String pluginVersion = parameters.get(RequestParameters.Parameters.PLUGIN_VERSION.getParameter());
                         if(pluginVersion.equals(d.getPluginVersion())){
-                            response = new Response(request.getProtocol(), StatusCode.OK);
-                        }else{
-                            //TODO: Blank response it does not exists the device + client with that plugin version
-                            System.out.println("Wrong plugin version!");
+
+                            //Get the host for the current connections of the device
+                            int currentConnections = d.getCurrentConnetions();
+                            String hostName = d.getHostNameForConnection(currentConnections);
+                            d.setCurrentConnetions(currentConnections+1);
+
+                            HostManager hostManager = HostManager.getInstance();
+                            Host host = hostManager.getHostByName(hostName);
+
+                            HostResponse hostResponse = host.addRequest(request.getProtocol(), d.getPingTime());
+
+                            //response = new Response(request.getProtocol(), StatusCode.OK);
+                            return new Response(hostResponse, request.getProtocol(), StatusCode.OK);
                         }
-
-                    }else{
-                        //TODO: blank response
-                        System.out.println("Wrong device");
                     }
-                }else{
-                    //TODO: blank response
-                    System.out.println("No pertenece!");
                 }
-            } else {
-                // TODO: DEVOLVER RESPUESTA VACIA
-                System.out.println("Faltan parametros");
             }
-
+            response = new Response(null, request.getProtocol(), StatusCode.OK);
         } else {
-            response = new Response(request.getProtocol(), StatusCode.NOT_IMPLEMENTED);
+            response = new Response(null, request.getProtocol(), StatusCode.NOT_IMPLEMENTED);
         }
-
         return response;
     }
 

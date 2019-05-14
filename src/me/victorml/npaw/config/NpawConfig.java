@@ -5,10 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import me.victorml.npaw.model.Client;
 import me.victorml.npaw.model.Device;
-import me.victorml.npaw.model.Host;
+import me.victorml.npaw.model.HostInfo;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -51,9 +52,11 @@ public class NpawConfig {
             devices.putAll(c.getTargetDevices());
             c.setTargetDevices(devices);
             for (Device d : c.getTargetDevices().values()) {
-                Map<String, Host> hosts = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+                Map<String, HostInfo> hosts = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                 hosts.putAll(d.getHosts());
                 d.setHosts(hosts);
+                //Populate the array of connections and HostManager
+                d.populateConnections();
             }
         }
         this.clients = clientes;

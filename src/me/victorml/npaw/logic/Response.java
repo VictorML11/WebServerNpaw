@@ -1,6 +1,8 @@
 package me.victorml.npaw.logic;
 
 
+import me.victorml.npaw.model.HostResponse;
+
 import java.util.Date;
 import java.util.HashMap;
 
@@ -17,7 +19,10 @@ public class Response {
     private HashMap<String, String> header;
     private byte [] body;
 
-    public Response(String protocol, StatusCode statusCode) {
+    private HostResponse hostResponse;
+
+    public Response(HostResponse hostResponse, String protocol, StatusCode statusCode) {
+        this.hostResponse = hostResponse;
         this.protocol = protocol;
         this.statusCode = statusCode;
         this.date = new Date();
@@ -27,7 +32,7 @@ public class Response {
 
     private void setUp(){
         this.setDate();
-        String xml = xmlTest();
+        String xml = generateXml();
         this.setContentLength(xml);
         this.setContentType("text/xml"); //TODO: "text/html" ...
         this.setBody(xml);
@@ -50,13 +55,15 @@ public class Response {
     }
 
 
-    private String xmlTest(){
+    private String generateXml(){
         // Just for testing now do a parsing info from request!
+        if (hostResponse == null) return "";
+
         return "<?xml version='1.0' encoding='UTF-8'?>\n" +
                 "<q>\n" +
-                "<h>clusterA.com</h>\n" +
-                "<pt>5</pt>\n" +
-                "<c>7xnj85f06yqswc5x</c>\n" +
+                "<h>" + this.hostResponse.getName() + "</h>\n" +
+                "<pt>" + this.hostResponse.getPingTime() + "</pt>\n" +
+                "<c>"+ this.hostResponse.getId() +"</c>\n" +
                 "</q>";
     }
 
