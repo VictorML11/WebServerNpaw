@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WebServerNpaw:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebServerNpaw_jar</output-path>
+    <root id="archive" name="WebServerNpaw.jar">
+      <element id="module-output" name="WebServerNpaw" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/config.json" />
+    </root>
+  </artifact>
+</component>

@@ -1,12 +1,15 @@
 package me.victorml.npaw.logic;
 
+import me.victorml.npaw.config.NpawConfig;
+import me.victorml.npaw.model.Client;
+import me.victorml.npaw.model.Device;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Utils {
 
@@ -79,39 +82,40 @@ public class Utils {
 
             HashMap<String, String> parameters = request.getParameters();
             // Verify the parameters
-
-            /*
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue());
-            }*/
-
             // Do we have the correct lenght? it means we have all parameters otherwhise we are lack of info
             if (parameters.size() == 3) {
-                // Check if the account is from the server:
-                String account = parameters.get(RequestParameters.Parameters.ACCOUNT_CODE.getParameter());
 
-                if (account.equalsIgnoreCase("clienteA") || account.equalsIgnoreCase("clienteB")) {
-                    // localhost:8080/getData?accountCode=clienteA&targetDevice=XBox&pluginVersion=3.3.1
-                    //System.out.println("Pertenece a la plataforma");
-                    response = new Response(request.getProtocol(), StatusCode.OK);
-                } else {
-                    // TODO: DEVOLVER RESPUESTA VACIA
+                String account = parameters.get(RequestParameters.Parameters.ACCOUNT_CODE.getParameter());
+                //If client exists
+                Client c = NpawConfig.getInstance().getClient(account);
+                if(c != null){
+                    String device = parameters.get(RequestParameters.Parameters.TARGET_DEVICE.getParameter());
+                    Device d = c.getDevice(device);
+                    if(d != null){
+                        String pluginVersion = parameters.get(RequestParameters.Parameters.PLUGIN_VERSION.getParameter());
+                        if(pluginVersion.equals(d.getPluginVersion())){
+                            response = new Response(request.getProtocol(), StatusCode.OK);
+                        }else{
+                            //TODO: Blank response it does not exists the device + client with that plugin version
+                            System.out.println("Wrong plugin version!");
+                        }
+
+                    }else{
+                        //TODO: blank response
+                        System.out.println("Wrong device");
+                    }
+                }else{
+                    //TODO: blank response
                     System.out.println("No pertenece!");
                 }
-
-
             } else {
                 // TODO: DEVOLVER RESPUESTA VACIA
                 System.out.println("Faltan parametros");
             }
 
-
         } else {
             response = new Response(request.getProtocol(), StatusCode.NOT_IMPLEMENTED);
         }
-
-
-
 
         return response;
     }

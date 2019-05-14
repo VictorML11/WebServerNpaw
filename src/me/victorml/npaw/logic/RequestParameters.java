@@ -29,7 +29,7 @@ public class RequestParameters {
                     String[] sparam = urlparam.split("=");
 
                     if(verifyKeyParameter(sparam[0])){
-                        parameters.put(sparam[0], sparam[1]);
+                        parameters.put(sparam[0], sparam[1].toLowerCase());
                     }else{
                         System.err.println("Error the parameter: " + sparam[0] + " does not exist!");
                     }
@@ -50,9 +50,8 @@ public class RequestParameters {
     }
 
     public boolean verifyKeyParameter(String s){
-        return Arrays.stream(Parameters.values()).anyMatch(parameter -> s.equalsIgnoreCase(parameter.getParameter()));
+        return Arrays.stream(Parameters.values()).anyMatch(parameter -> s.equals(parameter.getParameter()));
     }
-
 
 
 
