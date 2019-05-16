@@ -39,11 +39,11 @@ public class Client {
 
     @Override
     public String toString() {
-        String r = "Account Code: " + this.accountCode +"\n";
-        for(Map.Entry<String, Device> entry : this.targetDevices.entrySet()){
-            r += "targetDevice = " + entry.getKey() +"\n";
-            r += entry.getValue().toString() +"\n";
-        }
-        return r;
+        StringBuilder r = new StringBuilder("Account Code: " + this.accountCode + "\n");
+        this.targetDevices.forEach((key, value) -> {
+            r.append("targetDevice = ").append(key).append("\n");
+            r.append(value.toString()).append("\n");
+        });
+        return r.toString();
     }
 }

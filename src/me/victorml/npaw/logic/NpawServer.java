@@ -16,6 +16,12 @@ public class NpawServer implements Runnable{
     private int maxThreads;
     private int maxConnections;
 
+    /**
+     * Create a new NPawServer instance for accepting petitions
+     * @param port port to run the web service
+     * @param maxThreads number of threads to use in the pool
+     * @param maxConnections maximum length of the queue of incoming connections
+     */
     public NpawServer(int port, int maxThreads, int maxConnections) {
         this.port = port;
         this.maxThreads = maxThreads;
@@ -26,7 +32,7 @@ public class NpawServer implements Runnable{
     public void run() {
         this.createServer();
 
-        System.out.println("Server is running at localhost port: " + this.port);
+        System.out.println("[INFO] Server is running at localhost port: " + this.port);
 
         while (!Thread.interrupted()) {
 
@@ -51,6 +57,9 @@ public class NpawServer implements Runnable{
         }
     }
 
+    /**
+     * Close the server
+     */
     public void closeServer() {
 
         // First try to close the ServerSocket

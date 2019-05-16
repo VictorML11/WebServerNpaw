@@ -3,9 +3,9 @@ package me.victorml.npaw.model;
 public class HostInfo {
 
     private String name;
-    private float charge;
+    private int charge;
 
-    public HostInfo(String name, float charge) {
+    public HostInfo(String name, int charge) {
         this.name = name;
         this.charge = charge;
     }
@@ -22,7 +22,7 @@ public class HostInfo {
         return charge;
     }
 
-    public void setCharge(float charge) {
+    public void setCharge(int charge) {
         this.charge = charge;
     }
 

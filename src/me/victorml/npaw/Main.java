@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import me.victorml.npaw.config.NpawConfig;
 import me.victorml.npaw.logic.NpawServer;
 import me.victorml.npaw.model.Client;
-import me.victorml.npaw.model.HostManager;
+import me.victorml.npaw.model.hosts.HostManager;
 
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -35,20 +35,26 @@ public class Main {
     public static void main(String[] args) {
 
         // Load configuration
+        System.out.println("\n[INFO] Searching for configuration...");
         npawConfig = NpawConfig.getInstance();
         hostManager = HostManager.getInstance();
 
-        // Save config in case the file didnt exists
         Map<String, Client> clients = npawConfig.loadClientsFromFile();
         npawConfig.setUpClients(clients);
+        // Save config in case the file didn't exists
         npawConfig.saveClientsToFile();
 
+        System.out.println("\n[INFO] Starting the WebServer...");
         //Create the Server at PORT & limited THREAD count
         new Thread(new NpawServer(PORT, MAX_THREADS, BACKLOG)).start();
 
-        listenForCommands();
-
-
+        // Wait a little and listen for incoming commands
+        try {
+            Thread.sleep(1000);
+            listenForCommands();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -58,9 +64,11 @@ public class Main {
         String cmd;
 
         do{
-            System.out.println("Enter a Command: [ RELOAD , EXIT ] :");
+            System.out.println("\nAvailable Commands : [ RELOAD , EXIT ] :");
             cmd = sc.nextLine();
+
             if(cmd.equalsIgnoreCase(RELOAD)) {
+
                 Map<String, Client> clients = npawConfig.loadClientsFromFile();
                 npawConfig.setUpClients(clients);
                 npawConfig.saveClientsToFile();
@@ -69,6 +77,8 @@ public class Main {
                 // are not longer in config since they have been deleted they are in memory and
                 // we want to free it
                 hostManager.reloadHosts();
+
+                System.out.println("config.json reloaded correctly!");
 
             }else{
                 System.err.println("The Command " + cmd + " does not exists");

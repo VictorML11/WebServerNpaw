@@ -1,7 +1,7 @@
 package me.victorml.npaw.logic;
 
 
-import me.victorml.npaw.model.HostResponse;
+import me.victorml.npaw.model.hosts.HostResponse;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class Response {
         this.setDate();
         String xml = generateXml();
         this.setContentLength(xml);
-        this.setContentType("text/xml"); //TODO: "text/html" ...
+        this.setContentType("text/xml");
         this.setBody(xml);
     }
 

@@ -70,6 +70,7 @@ public class FileUtil {
             }
         } else {
             System.out.println("[INFO] " + this.file.getName() + ".json was not found. Using default config");
+            // Since the json does not exist we will get the default config from the jar
             InputStream configStream = getClass().getResourceAsStream("/config.json");
             reader = new BufferedReader(new InputStreamReader(configStream));
             data = readFile(reader);
@@ -98,10 +99,18 @@ public class FileUtil {
     }
 
 
+    /**
+     * Get The configuration file
+     * @return File
+     */
     public File getFile() {
         return file;
     }
 
+    /**
+     * Set the configuration file
+     * @param file File to use as a configuration file
+     */
     public void setFile(File file) {
         this.file = file;
     }

@@ -2,6 +2,9 @@ package me.victorml.npaw.logic;
 
 import me.victorml.npaw.config.NpawConfig;
 import me.victorml.npaw.model.*;
+import me.victorml.npaw.model.hosts.Host;
+import me.victorml.npaw.model.hosts.HostManager;
+import me.victorml.npaw.model.hosts.HostResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -84,28 +87,30 @@ public class Utils {
             // Do we have the correct lenght? it means we have all parameters otherwhise we are lack of info
             if (parameters.size() == 3) {
 
-                String account = parameters.get(RequestParameters.Parameters.ACCOUNT_CODE.getParameter());
+                String account = parameters.get(Parameters.ACCOUNT_CODE.getParameter());
                 //If client exists
                 Client c = NpawConfig.getInstance().getClient(account);
                 if(c != null){
-                    String device = parameters.get(RequestParameters.Parameters.TARGET_DEVICE.getParameter());
+                    String device = parameters.get(Parameters.TARGET_DEVICE.getParameter());
                     Device d = c.getDevice(device);
                     if(d != null){
-                        String pluginVersion = parameters.get(RequestParameters.Parameters.PLUGIN_VERSION.getParameter());
+                        String pluginVersion = parameters.get(Parameters.PLUGIN_VERSION.getParameter());
                         if(pluginVersion.equals(d.getPluginVersion())){
 
                             //Get the host for the current connections of the device
                             int currentConnections = d.getCurrentConnetions();
                             String hostName = d.getHostNameForConnection(currentConnections);
-                            d.setCurrentConnetions(currentConnections+1);
+                            if(hostName != null){
+                                d.setCurrentConnetions(currentConnections+1);
 
-                            HostManager hostManager = HostManager.getInstance();
-                            Host host = hostManager.getHostByName(hostName);
+                                HostManager hostManager = HostManager.getInstance();
+                                Host host = hostManager.getHostByName(hostName);
 
-                            HostResponse hostResponse = host.addRequest(request.getProtocol(), d.getPingTime());
+                                HostResponse hostResponse = host.addRequest(request.getProtocol(), d.getPingTime());
 
-                            //response = new Response(request.getProtocol(), StatusCode.OK);
-                            return new Response(hostResponse, request.getProtocol(), StatusCode.OK);
+                                //response = new Response(request.getProtocol(), StatusCode.OK);
+                                return new Response(hostResponse, request.getProtocol(), StatusCode.OK);
+                            }
                         }
                     }
                 }

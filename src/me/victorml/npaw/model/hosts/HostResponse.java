@@ -1,4 +1,4 @@
-package me.victorml.npaw.model;
+package me.victorml.npaw.model.hosts;
 
 import java.util.UUID;
 

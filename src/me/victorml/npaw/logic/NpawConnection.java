@@ -14,6 +14,11 @@ public class NpawConnection implements Runnable {
     private InputStream in;
     private OutputStream out;
 
+    /**
+     * Create a new NpawConnection for certain petition
+     * @param npawServer server running
+     * @param client
+     */
     public NpawConnection(NpawServer npawServer, Socket client) {
         this.npawServer = npawServer;
         this.client = client;

@@ -9,7 +9,7 @@
         "hosts": {
           "ClusterB.com": {
             "name": "ClusterB.com",
-            "charge": 100.0
+            "charge": 100
           }
         }
       },
@@ -20,11 +20,11 @@
         "hosts": {
           "ClusterA.com": {
             "name": "ClusterA.com",
-            "charge": 70.0
+            "charge": 70
           },
           "ClusterB.com": {
             "name": "ClusterB.com",
-            "charge": 30.0
+            "charge": 30
           }
         }
       }
@@ -40,11 +40,11 @@
         "hosts": {
           "ClusterA.com": {
             "name": "ClusterA.com",
-            "charge": 50.0
+            "charge": 50
           },
           "ClusterB.com": {
             "name": "ClusterB.com",
-            "charge": 50.0
+            "charge": 50
           }
         }
       }
