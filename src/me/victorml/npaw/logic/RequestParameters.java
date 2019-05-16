@@ -21,7 +21,7 @@ public class RequestParameters {
             String [] urlsplit = url.split("\\?");
 
             // Check if we are using the correct route
-            if(urlsplit[0].equals("/getData")){
+            if(urlsplit[0].equalsIgnoreCase("/getData")){
                 // Get each parameter k=v
                 String [] urlparams = urlsplit[1].split("&");
                 // For each parameter get the key and value
@@ -37,10 +37,15 @@ public class RequestParameters {
             }
         }else{
             // We should never reach hear but who knows!
-            System.err.println("Error! the url of the requests was absolutly null!");
+            System.err.println("Error! the url of the requests was absolutely null!");
         }
     }
 
+    /**
+     * Verifies that the key parameter is a possible key
+     * @param s key to check
+     * @return boolean
+     */
     public boolean verifyKeyParameter(String s){
         return Arrays.stream(Parameters.values()).anyMatch(parameter -> s.equals(parameter.getParameter()));
     }
@@ -52,8 +57,6 @@ public class RequestParameters {
     public HashMap<String, String> getParameters() {
         return parameters;
     }
-
-
 
 }
 

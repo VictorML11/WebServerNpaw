@@ -81,7 +81,7 @@ public class Request {
         return srequest.toString();
     }
 
-    //Apply Builder Pattern
+    // Apply Builder Pattern
 
     public static class RequestBuilder{
         private String httpMethod;

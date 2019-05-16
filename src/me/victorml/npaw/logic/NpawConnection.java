@@ -30,9 +30,11 @@ public class NpawConnection implements Runnable {
         try {
 
             this.setStreams();
+            // Parse the request from the InputStream of the client
             Request request = Utils.getClientRequest(in);
 
             if (request != null) {
+                // Get the response from the host and send it to the client
                 Response response = Utils.getResponse(request);
                 this.sendResponse(response);
             }
@@ -48,6 +50,10 @@ public class NpawConnection implements Runnable {
 
     }
 
+    /**
+     * Send the response from the host to the client
+     * @param resp Response to send to the client
+     */
     public void sendResponse(Response resp) {
         String sresp = resp.toString();
         PrintWriter writer = new PrintWriter(out);

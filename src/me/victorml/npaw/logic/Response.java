@@ -56,7 +56,6 @@ public class Response {
 
 
     private String generateXml(){
-        // Just for testing now do a parsing info from request!
         if (hostResponse == null) return "";
 
         return "<?xml version='1.0' encoding='UTF-8'?>\n" +
