@@ -46,7 +46,9 @@ public class Main {
 
         System.out.println("\n[INFO] Starting the WebServer...");
         //Create the Server at PORT & limited THREAD count
-        new Thread(new NpawServer(PORT, MAX_THREADS, BACKLOG)).start();
+        NpawServer npawServer = new NpawServer(PORT, MAX_THREADS, BACKLOG);
+        Thread t = new Thread(npawServer);
+        t.start();
 
         // Wait a little and listen for incoming commands
         try {
@@ -55,6 +57,11 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        //Stop the WebServer
+        t.interrupt();
+        npawServer.closeServer();
+
     }
 
 
@@ -62,6 +69,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         String cmd;
+        boolean exit = false;
 
         do{
             System.out.println("\nAvailable Commands : [ RELOAD , EXIT ] :");
@@ -80,11 +88,16 @@ public class Main {
 
                 System.out.println("config.json reloaded correctly!");
 
-            }else{
+            }else if(cmd.equalsIgnoreCase(EXIT)){
+                System.out.println("Closing the WebServer...");
+                exit = true;
+            } else{
                 System.err.println("The Command " + cmd + " does not exists");
             }
 
-        }while(!cmd.equalsIgnoreCase(EXIT));
+        }while(!exit);
+
+
 
     }
 }

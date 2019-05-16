@@ -16,7 +16,7 @@
       "XBox": {
         "name": "XBox",
         "pluginVersion": "3.3.1",
-        "pingTime": 5,
+        "pingTime": 10,
         "hosts": {
           "ClusterA.com": {
             "name": "ClusterA.com",
