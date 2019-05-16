@@ -98,11 +98,9 @@ public class Utils {
                         if(pluginVersion.equals(d.getPluginVersion())){
 
                             //Get the host for the current connections of the device
-                            int currentConnections = d.getCurrentConnetions();
+                            int currentConnections = d.getCurrentConnetions(true);
                             String hostName = d.getHostNameForConnection(currentConnections);
                             if(hostName != null){
-                                d.setCurrentConnetions(currentConnections+1);
-
                                 HostManager hostManager = HostManager.getInstance();
                                 Host host = hostManager.getHostByName(hostName);
 

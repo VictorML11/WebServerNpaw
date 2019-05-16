@@ -85,18 +85,10 @@ public class Device {
      *
      * @return int with currentConnections
      */
-    public synchronized int getCurrentConnetions() {
-        return currentConnetions;
-    }
-
-    /**
-     * Set the current connections to a certain ammount - It is synchronized
-     * important to do that but it is resource demanding! Keep that in mind.
-     *
-     * @param connections amount of connections to set
-     */
-    public synchronized void setCurrentConnetions(int connections) {
-        this.currentConnetions = connections;
+    public synchronized int getCurrentConnetions(boolean add) {
+        int current = this.currentConnetions;
+        if(add) this.currentConnetions += 1;
+        return current;
     }
 
 

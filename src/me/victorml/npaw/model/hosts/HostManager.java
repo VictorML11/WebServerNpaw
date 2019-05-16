@@ -15,31 +15,9 @@ public class HostManager {
         hosts = new ConcurrentSkipListMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
-    public Host getHostByName(String name){
-        return this.hosts.get(name);
-    }
-
-    public void createHostByName(String name){
-        if(!this.hosts.containsKey(name)){
-            this.hosts.put(name, new Host(name));
-        }
-    }
-
-    public void reloadHosts(){
-        NpawConfig npawConfig = NpawConfig.getInstance();
-        ArrayList<String> currentClusters = npawConfig.getClusters();
-        //Remove the keys that are not in live now! It means they have been removed in the reload
-        for (String cluster : hosts.keySet()) {
-            if (!currentClusters.contains(cluster)) {
-                this.hosts.remove(cluster);
-            }
-        }
-    }
-
 
     /**
      * Singleton instance for HostManager data
-     *
      * @return HostManager
      */
     public static HostManager getInstance() {
@@ -50,12 +28,53 @@ public class HostManager {
         return instance;
     }
 
+    public Host getHostByName(String name){
+        return this.hosts.get(name);
+    }
+
+    /**
+     * Create a new cluster if it does not exists yet
+     * @param name cluster name
+     */
+    public void createHostByName(String name){
+        if(!this.hosts.containsKey(name)){
+            this.hosts.put(name, new Host(name));
+        }
+    }
+
+    /**
+     * Reload the clusters so that there are only the ones they should be
+     * after reloading the config
+     */
+    public void reloadHosts(){
+        NpawConfig npawConfig = NpawConfig.getInstance();
+        ArrayList<String> currentClusters = npawConfig.getClusters();
+        // Remove the keys that are not in live now!
+        // It means they have been removed in the reload
+        for (String cluster : hosts.keySet()) {
+            if (!currentClusters.contains(cluster)) {
+                this.hosts.remove(cluster);
+            }
+        }
+    }
+
+
+
+
+    public Map<String, Host> getHosts() {
+        return hosts;
+    }
+
+    public void setHosts(Map<String, Host> hosts) {
+        this.hosts = hosts;
+    }
+
     @Override
     public String toString() {
-        String r = "";
+        StringBuilder r = new StringBuilder();
         for(Map.Entry<String,Host> entry : this.hosts.entrySet()){
-            r += entry.getKey() + " " + entry.getValue().toString() + "\n";
+            r.append(entry.getKey()).append(" ").append(entry.getValue().toString()).append("\n");
         }
-        return r;
+        return r.toString();
     }
 }

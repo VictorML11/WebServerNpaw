@@ -41,6 +41,10 @@ public class RequestParameters {
         }
     }
 
+    public boolean verifyKeyParameter(String s){
+        return Arrays.stream(Parameters.values()).anyMatch(parameter -> s.equals(parameter.getParameter()));
+    }
+
     public String getUrl() {
         return url;
     }
@@ -49,9 +53,7 @@ public class RequestParameters {
         return parameters;
     }
 
-    public boolean verifyKeyParameter(String s){
-        return Arrays.stream(Parameters.values()).anyMatch(parameter -> s.equals(parameter.getParameter()));
-    }
+
 
 }
 

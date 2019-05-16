@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import me.victorml.npaw.config.NpawConfig;
 import me.victorml.npaw.logic.NpawServer;
 import me.victorml.npaw.model.Client;
+import me.victorml.npaw.model.Device;
+import me.victorml.npaw.model.hosts.Host;
 import me.victorml.npaw.model.hosts.HostManager;
 
 import java.lang.reflect.Modifier;
@@ -26,6 +28,7 @@ public class Main {
 
     private static final String RELOAD = "reload";
     private static final String EXIT = "exit";
+    private static final String SHOW = "show";
 
 
     private static NpawConfig npawConfig;
@@ -72,7 +75,7 @@ public class Main {
         boolean exit = false;
 
         do{
-            System.out.println("\nAvailable Commands : [ RELOAD , EXIT ] :");
+            System.out.println("\nAvailable Commands : [ RELOAD , SHOW,  EXIT ] :");
             cmd = sc.nextLine();
 
             if(cmd.equalsIgnoreCase(RELOAD)) {
@@ -88,9 +91,36 @@ public class Main {
 
                 System.out.println("config.json reloaded correctly!");
 
+            }else if(cmd.equalsIgnoreCase(SHOW)){
+
+                // Print current stats
+                System.out.println("\n ###### DATA ######\n");
+                int total = 0;
+                for(Client c : npawConfig.getClients().values()){
+                    String code = c.getAccountCode();
+                    System.out.println("AccountCode: " + code);
+                    for(Device d : c.getTargetDevices().values()){
+                        int connections =  d.getCurrentConnetions(false);
+                        total += connections;
+                        System.out.println("\tDevice: " +  d.getName());
+                        System.out.print("\t\tConnections: " + connections + "\n");
+                    }
+                }
+
+                System.out.print("\n-> Total connections: " + total);
+                for(Host h : hostManager.getHosts().values()){
+                    System.out.print("\n HostName: " + h.getName());
+                    if (total == 0){
+                        System.out.print("\n\t HostCharge: " + 0 + "%");
+                    } else{
+                        float percent = (h.getSize()*100)/total;
+                        System.out.print("\n\t HostCharge: " + percent + "%");
+                    }
+                }
             }else if(cmd.equalsIgnoreCase(EXIT)){
                 System.out.println("Closing the WebServer...");
                 exit = true;
+
             } else{
                 System.err.println("The Command " + cmd + " does not exists");
             }

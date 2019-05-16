@@ -35,9 +35,6 @@ public class NpawConnection implements Runnable {
             if (request != null) {
                 Response response = Utils.getResponse(request);
                 this.sendResponse(response);
-            }else{
-                // /favicon.ico also enters here!
-                // System.err.println("Error in request: null request");
             }
 
             this.closeStreams();
